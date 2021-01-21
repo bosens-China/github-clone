@@ -2,7 +2,7 @@
 
 ![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.0.0-brightgreen)
 
-解决 Github clone 速度慢的工具。
+工程化解决 Github clone 速度慢的工具
 
 ## 工作流程
 

@@ -42,7 +42,7 @@
     "name": "boses",
     "email": "yangboses@gmail.com"
   },
-  "description": "breeze 是一个简化开发，用于快速构建项目的工具",
+  "description": "工程化解决 Github clone 速度慢的工具",
   "keywords": [
     "git",
     "github",
