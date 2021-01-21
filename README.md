@@ -1,6 +1,6 @@
 # github-clone
 
-![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.0.3-brightgreen)
+![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.0.9-brightgreen)
 
 解决国内 Github clone 速度慢的工具
 

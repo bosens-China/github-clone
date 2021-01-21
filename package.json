@@ -1,6 +1,6 @@
 {
   "name": "@boses/github-clone",
-  "version": "1.0.3",
+  "version": "1.0.9",
   "main": "dist/src/main.js",
   "license": "MIT",
   "devDependencies": {
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "build-watch": "tsc -w",
+    "build-watch": "tsc && tsc -w",
     "test": "jest"
   },
   "dependencies": {
@@ -35,8 +35,8 @@
     "node": ">=10.6.0"
   },
   "files": [
-    "dist",
-    "dist/**/*.js",
+    "/dist",
+    "src/*.js",
     "*.md"
   ],
   "author": {
