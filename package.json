@@ -1,0 +1,56 @@
+{
+  "name": "@boses/github-clone",
+  "version": "1.0.0",
+  "main": "dist/src/main.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-typescript": "^7.12.7",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.22",
+    "@typescript-eslint/eslint-plugin": "^4.14.0",
+    "@typescript-eslint/parser": "^4.14.0",
+    "babel-jest": "^26.6.3",
+    "eslint": "^7.18.0",
+    "eslint-config-alloy": "^3.10.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build-watch": "tsc -w",
+    "test": "jest"
+  },
+  "dependencies": {
+    "commander": "^7.0.0"
+  },
+  "bin": {
+    "g": "dist/src/main.js"
+  },
+  "engines": {
+    "node": ">=10.6.0"
+  },
+  "files": [
+    "dist",
+    "*.md"
+  ],
+  "author": {
+    "name": "boses",
+    "email": "yangboses@gmail.com"
+  },
+  "description": "breeze 是一个简化开发，用于快速构建项目的工具",
+  "keywords": [
+    "git",
+    "github",
+    "clone",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bosens-China/breeze-clone"
+  }
+}
