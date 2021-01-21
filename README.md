@@ -2,7 +2,7 @@
 
 ![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.0.0-brightgreen)
 
-工程化解决 Github clone 速度慢的工具
+解决国内 Github clone 速度慢的工具
 
 ## 工作流程
 
@@ -20,7 +20,7 @@ npm i -g @boses/breeze-clone
 
 ## 用法
 
-### clone <path> [dir] <--branch>
+### clone <path> [dir] <--branch [branchName]>
 
 #### path
 
@@ -79,6 +79,8 @@ g clone https://github.com/bosens-China/github-clone.git -b dev
 
 如果发现错误或者需要有更好的建议欢迎在 [issues](https://github.com/bosens-China/github-clone) 中提出
 
+## 参考
+- [知乎 git clone一个github上的仓库，太慢，经常连接失败...](https://www.zhihu.com/question/27159393/answer/1117219745)
 ## 协议
 
 [MIT License](/License)
