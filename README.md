@@ -30,10 +30,15 @@ npm i -g @boses/breeze-clone
 拉取 Github 仓库 对应的地址，可以拉取以下三种类型地址
 
 1. https://github.com/bosens-China/github-clone
+
    默认浏览器导航栏的地址
+
 2. https://github.com/bosens-China/github-clone.git
+
    Github 右侧 Code HTTPS 的地址
+
 3. git@github.com:bosens-China/breeze-clone.git
+
    Github 右侧 Code SSH 的地址
 
 #### dir
@@ -44,13 +49,13 @@ npm i -g @boses/breeze-clone
 
 重命名 clone 拉取到本地目录名称
 
-#### --branch
+#### branch
 
 - type:`stirng`
 - require: `false`
 - default: `undefined`
 
-指定拉取的分支名称，也可以以`-b`的短形式使用，例如
+指定拉取的分支名称，可以以`--branch`长形式使用也可以以`-b`的短形式使用，例如
 
 ```sh
 g clone https://github.com/bosens-China/github-clone.git -b dev
@@ -68,11 +73,11 @@ g clone https://github.com/bosens-China/github-clone.git -b dev
 
 ### get
 
-返回用户配置的`set [url]`
+返回用户配置的`set [url]`地址
 
 ## 其他
 
-如果发现错误或者需要有更好的建议欢迎在 [issues](https://github.com/bosens-China/breeze-clone/issues) 中提出
+如果发现错误或者需要有更好的建议欢迎在 [issues](https://github.com/bosens-China/github-clone) 中提出
 
 ## 协议
 
