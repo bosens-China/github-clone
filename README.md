@@ -11,9 +11,9 @@
 ## 安装
 
 ```sh
-npm i -g @boses/breeze-clone
+npm i -g @boses/github-clone
 # or
-npm i -g @boses/breeze-clone
+npm i -g @boses/github-clone
 ```
 
 之后可以通过`g clone <path>`来使用，更多详细输出可以使用`g ---help`来查看
