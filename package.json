@@ -1,6 +1,6 @@
 {
   "name": "@boses/github-clone",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "main": "dist/src/main.js",
   "license": "MIT",
   "devDependencies": {
@@ -36,6 +36,7 @@
   },
   "files": [
     "dist",
+    "dist/**/*.js",
     "*.md"
   ],
   "author": {

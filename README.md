@@ -1,6 +1,6 @@
 # github-clone
 
-![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.0.0-brightgreen)
+![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.0.3-brightgreen)
 
 解决国内 Github clone 速度慢的工具
 
@@ -13,7 +13,7 @@
 ```sh
 npm i -g @boses/github-clone
 # or
-npm i -g @boses/github-clone
+yarn global add @boses/github-clone
 ```
 
 之后可以通过`g clone <path>`来使用，更多详细输出可以使用`g ---help`来查看
