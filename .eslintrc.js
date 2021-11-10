@@ -1,21 +1,20 @@
 module.exports = {
-  extends: ['alloy', 'alloy/typescript'],
   env: {
-    // Your environments (which contains several predefined global variables)
-    //
-    // browser: true,
+    browser: true,
+    es2021: true,
     node: true,
-    // mocha: true,
     jest: true,
-    // jquery: true
   },
-  globals: {
-    // Your global variables (setting to false means it's not allowed to be reassigned)
-    //
-    // myGlobal: false
+  extends: ['standard', 'prettier'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 13,
+    sourceType: 'module',
   },
-  plugins: ['prettier'],
+  plugins: ['@typescript-eslint', 'prettier'],
   rules: {
+    indent: 'off',
+    '@typescript-eslint/indent': ['error', 2],
     'prettier/prettier': 'error',
   },
 };

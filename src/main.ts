@@ -2,9 +2,9 @@
 
 import { Command } from 'commander';
 import { version } from '../package.json';
-import { isGithubLink, error, existenceGit, cloneGie, githubReplace, gitDir, setGitSource } from './utils';
-import { getConfig, DEFAULTPATH, setConfig } from './config';
-import { Iconfig } from '../typings/typings';
+import { getAddress, setAddress, DEFAULTPATH } from './config';
+import GitClone from './gitClone';
+import { setGitSource } from './utils';
 
 const program = new Command();
 program.version(version, '-v, --version', '输出当前版本号');
@@ -13,46 +13,40 @@ program
   .command('clone <url> [warehouse]')
   .description('根据url拉取指定仓库')
   .option('-b, --branch <value>', '拉取指定分支')
-  .action(async (url, warehouse, { branch } = {}) => {
-    if (!isGithubLink(url)) {
-      return error(`${url} 不是一个有效的链接，目前只支持github的shh和https仓库链接!`);
-    }
-    if (!(await existenceGit())) {
-      return error(`git不存在，请安装git之后在进行操作: https://git-scm.com/`);
-    }
-    // 读取配置文件
-    const config = await getConfig<Iconfig>();
-    const replaceStr = githubReplace(url, config.path);
-    // 拉取
-    const str = `git clone ${replaceStr}${warehouse ? ` ${warehouse}` : ''}${branch ? ` --branch ${branch}` : ''}`;
+  .action((url, dir, { branch } = {}) => {
+    const gitClone = new GitClone({
+      url,
+      branch,
+      dir,
+    });
+    // 替换镜像地址
+    gitClone.option.url = gitClone.replaceMirror(url, getAddress());
     try {
-      await cloneGie(str);
+      // 开始拉取
+      gitClone.clone();
+      // 拉取成功之后，进入拉取目录修改推送源地址
+      const directory = dir || gitClone.getDir();
+      setGitSource(directory, url);
     } catch (e) {
-      return error();
+      console.error(`${e instanceof Error ? e.message : e}`);
     }
-    // 拉取成功之后，进入拉取目录修改推送源地址，结束
-    const dir = warehouse || gitDir(replaceStr);
-    await setGitSource(dir, url);
-    process.exit(0);
   });
 
 program
   .command('set [path]')
   .description(`修改github的镜像仓库地址,<path>可选，如果省略，默认为: ${DEFAULTPATH}`)
-  .action(async (pathUrl = DEFAULTPATH) => {
+  .action((pathUrl = DEFAULTPATH) => {
     try {
-      await setConfig<Iconfig>({ path: pathUrl });
-      process.exit(0);
-    } catch (e) {
-      error('set path失败');
+      setAddress(pathUrl);
+    } catch {
+      console.error(`set path error`);
     }
   });
 program
   .command('get [path]')
   .description(`读取当前的默认镜像地址`)
-  .action(async () => {
-    const config = await getConfig<Iconfig>();
-    console.log(`当前镜像地址为：${config.path}`);
-    process.exit(0);
+  .action(() => {
+    const path = getAddress();
+    console.log(`当前镜像地址为：${path}`);
   });
 program.parse(process.argv);

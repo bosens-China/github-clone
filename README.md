@@ -1,33 +1,41 @@
-# github-clone
+# GitHub-clone
 
-![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.0.9-brightgreen)
+![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.1.0-brightgreen)
 
-解决国内 Github clone 速度慢的工具
+解决国内 GitHub clone 速度慢的工具
+
+> 注意下面的书写形式遵循以下规范：
+>
+> `[]`代表这个字段必填，`<>`则为选填，而`name?:string`，表示这个参数为非必填。
 
 ## 工作流程
 
-首先根据镜像网站替换掉输入的`github.com`，之后拉取完成后执行`git remote set-url origin [url]`的操作
+- 首先将输入的 `github.com`替换成设置的镜像网站地址，默认为（github.com.cnpmjs.org）
+- 执行 `git clone [url]` 的操作
+- 拉取镜像完成之后，重写 git 的远程仓库推送地址，将镜像推送地址重置为 github 的镜像地址
 
-## 安装
+## 使用方式
+
+目前支持 CLI 和 Node 两种方式
+
+### CLI
 
 ```sh
-npm i -g @boses/github-clone
-# or
 yarn global add @boses/github-clone
 ```
 
-之后可以通过`g clone <path>`来使用，更多详细输出可以使用`g ---help`来查看
+之后可以简单通过`g clone <path>`形式来使用，更多详细输出可以使用`g ---help`来查看
 
-## 用法
+#### 用法
 
-### clone <path> [dir] <--branch [branchName]>
+**clone <path> [dir] <--branch [branchName]>**
 
-#### path
+`<path>`
 
 - type:`stirng`
-- require: `true`
+- require:`true`
 
-拉取 Github 仓库 对应的地址，可以拉取以下三种类型地址
+拉取 GitHub 仓库 对应的地址，可以拉取以下三种类型地址
 
 1. https://github.com/bosens-China/github-clone
 
@@ -41,46 +49,114 @@ yarn global add @boses/github-clone
 
    Github 右侧 Code SSH 的地址
 
-#### dir
+`[dir]`
 
 - type:`stirng`
-- require: `false`
-- default: `undefined`
+- require:`false`
 
-重命名 clone 拉取到本地目录名称
+clone 到本地的目录名称
 
-#### branch
+#### --branch [branchName]
+
+`[branchName]`
 
 - type:`stirng`
-- require: `false`
-- default: `undefined`
+- require:`false`
 
-指定拉取的分支名称，可以以`--branch`长形式使用也可以以`-b`的短形式使用，例如
+指定拉取的分支名称，可以以`--branch`长形式使用也可以以`-b`的短形式使用，例如：
 
 ```sh
 g clone https://github.com/bosens-China/github-clone.git -b dev
 ```
 
-### set [url]
+#### set [url]
 
-#### url
+`[url]`
 
 - type:`stirng`
-- require: `false`
-- default: `github.com.cnpmjs.org`
+- require:`false`
 
-用于配置`cloe`替换地址的 url
+用于配置镜像网站
 
-### get
+#### get
 
-返回用户配置的`set [url]`地址
+返回用户配置的`set [url]`地址，默认为`github.com.cnpmjs.org`
+
+### Node
+
+```sh
+yarn add @boses/github-clone
+```
+
+使用方式
+
+```js
+const GithubClone = require('@boses/github-clone');
+const github = new GithubClone({ url: 'https://github.com/SunshowerC/blog' });
+github.clone();
+```
+
+> clone 会以同步的形式运行，记得使用 `try` 包裹住可能的错误
+
+#### 选项
+
+**url**
+
+- type:`string`
+- require: `true`
+
+拉取的 GitHub 仓库地址
+
+**dir**
+
+- type:`string`
+- require:`false`
+
+拉取的目录名称
+
+**branch**
+
+- type:`string`
+- require:`false`
+
+拉取的分支名称
+
+#### 方法
+
+**gitExist(): boolean**
+
+判断 git 是否存在
+
+**clone(cwd?: string): void**
+
+git clone 拉取路径
+
+**isGithubLink(url: string): boolean**
+
+判断是否为支持的 GitHub 地址，目前只支持上面列举的三种
+
+**replaceMirror(currentWebsite: string, replaceWebsite: string): string**
+
+返回被替换的镜像网站地址
+
+例如传递 https://github.com/bosens-China/github-clone 会被替换成 https://github.com.cnpmjs.org/bosens-China/github-clone
+
+**getDir(url?: string): string**
+
+根据 Github 地址返回默认的文件夹名称
+
+例如 https://github.com.cnpmjs.org/bosens-China/github-clone 会返回 github-clone
 
 ## 其他
+
+目前版本更新导致对`1.0.9`之前的`g get`不支持，请重新执行`g set [url]`的操作
 
 如果发现错误或者需要有更好的建议欢迎在 [issues](https://github.com/bosens-China/github-clone) 中提出
 
 ## 参考
-- [知乎 git clone一个github上的仓库，太慢，经常连接失败...](https://www.zhihu.com/question/27159393/answer/1117219745)
+
+- [知乎 git clone 一个 github 上的仓库，太慢，经常连接失败...](https://www.zhihu.com/question/27159393/answer/1117219745)
+
 ## 协议
 
 [MIT License](/License)
