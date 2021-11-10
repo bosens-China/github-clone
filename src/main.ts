@@ -19,6 +19,17 @@ program
       branch,
       dir,
     });
+    if (!gitClone.isGithubLink(url)) {
+      console.error(
+        `${url} 不是有效链接，目前支持三种格式：\nhttps://github.com/bosens-China/github-clone\nhttps://github.com/bosens-China/github-clone.git\ngit@github.com:bosens-China/breeze-clone.git`,
+      );
+      return;
+    }
+    if (!gitClone.gitExist()) {
+      console.error(`git在当前环境不存在，请安装后继续 https://git-scm.com/`);
+      return;
+    }
+
     // 替换镜像地址
     gitClone.option.url = gitClone.replaceMirror(url, getAddress());
     try {

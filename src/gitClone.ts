@@ -32,14 +32,6 @@ class GitClone {
 
   public clone(cwd = process.cwd()) {
     const { url, dir, branch } = this.option;
-    if (!this.isGithubLink(url)) {
-      throw new Error(
-        `${url} 不是有效链接，目前支持三种格式：\nhttps://github.com/bosens-China/github-clone\nhttps://github.com/bosens-China/github-clone.git\ngit@github.com:bosens-China/breeze-clone.git`,
-      );
-    }
-    if (!this.gitExist()) {
-      throw new Error(`git在当前环境不存在，请安装后继续 https://git-scm.com/`);
-    }
     const shell = `git clone ${url}${dir ? ` ${dir}` : ''}${branch ? ` --branch ${branch}` : ''}`;
     this.pull(shell, cwd);
   }

@@ -1,6 +1,6 @@
 # GitHub-clone
 
-![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.1.0-brightgreen)
+![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.1.1-brightgreen)
 
 解决国内 GitHub clone 速度慢的工具
 
@@ -129,7 +129,22 @@ github.clone();
 
 **clone(cwd?: string): void**
 
-git clone 拉取路径
+执行 git clone 拉取。
+
+注意使用这个方法之前你应当判断一下环境和 url 是否有效，例如：
+
+```js
+if (!gitClone.isGithubLink(url)) {
+  console.error(
+    `${url} 不是有效链接，目前支持三种格式：\nhttps://github.com/bosens-China/github-clone\nhttps://github.com/bosens-China/github-clone.git\ngit@github.com:bosens-China/breeze-clone.git`,
+  );
+  return;
+}
+if (!gitClone.gitExist()) {
+  console.error(`git在当前环境不存在，请安装后继续 https://git-scm.com/`);
+  return;
+}
+```
 
 **isGithubLink(url: string): boolean**
 
