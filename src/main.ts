@@ -49,6 +49,7 @@ program
   .action((pathUrl = DEFAULTPATH) => {
     try {
       setAddress(pathUrl);
+      console.log(`set ${pathUrl}成功`);
     } catch {
       console.error(`set path error`);
     }

@@ -74,7 +74,7 @@ g clone https://github.com/bosens-China/github-clone.git -b dev
 `[url]`
 
 - type:`stirng`
-- require:`false`
+- require:`true`
 
 用于配置镜像网站
 
