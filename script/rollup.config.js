@@ -1,7 +1,8 @@
 import ignorePlugin from './ignore-plugin';
 import fs from 'fs-extra';
 import { defineConfig } from 'rollup';
-import { babel } from '@rollup/plugin-babel';
+// import { babel } from '@rollup/plugin-babel';
+import typescript2 from 'rollup-plugin-typescript2';
 import commonjs from '@rollup/plugin-commonjs';
 import path from 'path';
 import json from '@rollup/plugin-json';
@@ -38,13 +39,22 @@ export default defineConfig(
         nodeResolve({ extensions, rootDir: __dirname }),
         commonjs(),
         json(),
-        babel({
-          babelHelpers: 'runtime',
-          exclude: /exclude/,
-          extensions,
-          presets: [['@babel/preset-env'], '@babel/preset-typescript'],
-          // 禁止打包重复模块
-          plugins: ['@babel/plugin-transform-runtime'],
+        // babel({
+        //   babelHelpers: 'runtime',
+        //   exclude: /exclude/,
+        //   extensions,
+        //   presets: [['@babel/preset-env'], '@babel/preset-typescript'],
+        //   // 禁止打包重复模块
+        //   plugins: ['@babel/plugin-transform-runtime'],
+        // }),
+        typescript2({
+          tsconfigOverride: {
+            // 覆盖tsconfig.json的配置信息
+            compilerOptions: {
+              module: 'ESNext',
+              declaration: true,
+            },
+          },
         }),
         terser(),
         copyPlugin({

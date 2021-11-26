@@ -2,165 +2,114 @@
 
 ![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.1.1-brightgreen)
 
-解决国内 GitHub clone 速度慢的工具
+为了解决国内 GitHub clone 速度慢较慢的工具
 
-> 注意下面的书写形式遵循以下规范：
+> 注意以下文档书写形式遵循下述规范：
 >
-> `[]`代表这个字段必填，`<>`则为选填，而`name?:string`，表示这个参数为非必填。
+> `[]`代表这个字段必填，`<>`则为选填，而`name?:string`，表示这个参数为非必填为`string`类型。
 
-## 工作流程
+## 执行流程
 
 - 首先将输入的 `github.com`替换成设置的镜像网站地址，默认为（github.com.cnpmjs.org）
 - 执行 `git clone [url]` 的操作
 - 拉取镜像完成之后，重写 git 的远程仓库推送地址，将镜像推送地址重置为 github 的镜像地址
 
-## 使用方式
+## CLI 使用方式
 
-目前支持 CLI 和 Node 两种方式
-
-### CLI
+### 安装
 
 ```sh
 yarn global add @boses/github-clone
 ```
 
-之后可以简单通过`g clone <path>`形式来使用，更多详细输出可以使用`g ---help`来查看
+之后通过`g clone <path>`形式来使用，更多`API`和`clone`的使用方法可以调用`g ---help`查看。
 
-#### 用法
+### API
+
+#### Clone
 
 **clone <path> [dir] <--branch [branchName]>**
 
-`<path>`
+- `<path>`
 
-- type:`stirng`
-- require:`true`
+  - type:`stirng`
+  - require:`true`
 
-拉取 GitHub 仓库 对应的地址，可以拉取以下三种类型地址
+  拉取 GitHub 仓库 对应的地址，可以拉取以下三种类型地址
 
-1. https://github.com/bosens-China/github-clone
+  | 类型                                             | 说明                          |
+  | ------------------------------------------------ | ----------------------------- |
+  | https://github.com/bosens-China/github-clone     | 默认浏览器导航栏的地址        |
+  | https://github.com/bosens-China/github-clone.git | Github 右侧 Code HTTPS 的地址 |
+  | git@github.com:bosens-China/breeze-clone.git     | Github 右侧 Code SSH 的地址   |
 
-   默认浏览器导航栏的地址
+- `[dir]`
 
-2. https://github.com/bosens-China/github-clone.git
+  - type:`stirng`
+  - require:`false`
 
-   Github 右侧 Code HTTPS 的地址
+  clone 到本地的目录名称
 
-3. git@github.com:bosens-China/breeze-clone.git
+- `--branch [branchName]`
 
-   Github 右侧 Code SSH 的地址
+  - type:`stirng`
+  - require:`false`
 
-`[dir]`
+  指定拉取的分支名称，可以以`--branch`长形式使用也可以以`-b`的短形式使用，例如：
 
-- type:`stirng`
-- require:`false`
-
-clone 到本地的目录名称
-
-#### --branch [branchName]
-
-`[branchName]`
-
-- type:`stirng`
-- require:`false`
-
-指定拉取的分支名称，可以以`--branch`长形式使用也可以以`-b`的短形式使用，例如：
-
-```sh
-g clone https://github.com/bosens-China/github-clone.git -b dev
-```
+  ```sh
+  g clone https://github.com/bosens-China/github-clone.git -b dev
+  ```
 
 #### set [url]
 
-`[url]`
+- `[url]`
 
-- type:`stirng`
-- require:`true`
+  - type:`stirng`
+  - require:`true`
 
-用于配置镜像网站
+  用于配置镜像网站
 
 #### get
 
 返回用户配置的`set [url]`地址，默认为`github.com.cnpmjs.org`
 
-### Node
+## Node
+
+### 安装
 
 ```sh
 yarn add @boses/github-clone
 ```
 
-使用方式
-
 ```js
-const GithubClone = require('@boses/github-clone');
-const github = new GithubClone({ url: 'https://github.com/SunshowerC/blog' });
-github.clone();
+const clone = require('@boses/github-clone');
+// 也可以通过es模块引用
+// import clone from '@boses/github-clone/gitClone.esm'
+clone('https://github.com/SunshowerC/blog');
 ```
 
 > clone 会以同步的形式运行，记得使用 `try` 包裹住可能的错误
 
-#### 选项
+### API
 
-**url**
+`clone: (url: string, options: Partial<Options>) => void`
+
+#### url
 
 - type:`string`
 - require: `true`
 
 拉取的 GitHub 仓库地址
 
-**dir**
+#### options
 
-- type:`string`
-- require:`false`
-
-拉取的目录名称
-
-**branch**
-
-- type:`string`
-- require:`false`
-
-拉取的分支名称
-
-#### 方法
-
-**gitExist(): boolean**
-
-判断 git 是否存在
-
-**clone(cwd?: string): void**
-
-执行 git clone 拉取。
-
-注意使用这个方法之前你应当判断一下环境和 url 是否有效，例如：
-
-```js
-if (!gitClone.isGithubLink(url)) {
-  console.error(
-    `${url} 不是有效链接，目前支持三种格式：\nhttps://github.com/bosens-China/github-clone\nhttps://github.com/bosens-China/github-clone.git\ngit@github.com:bosens-China/breeze-clone.git`,
-  );
-  return;
-}
-if (!gitClone.gitExist()) {
-  console.error(`git在当前环境不存在，请安装后继续 https://git-scm.com/`);
-  return;
-}
-```
-
-**isGithubLink(url: string): boolean**
-
-判断是否为支持的 GitHub 地址，目前只支持上面列举的三种
-
-**replaceMirror(currentWebsite: string, replaceWebsite: string): string**
-
-返回被替换的镜像网站地址
-
-例如传递 https://github.com/bosens-China/github-clone 会被替换成 https://github.com.cnpmjs.org/bosens-China/github-clone
-
-**getDir(url?: string): string**
-
-根据 Github 地址返回默认的文件夹名称
-
-例如 https://github.com.cnpmjs.org/bosens-China/github-clone 会返回 github-clone
+| 名称          | 类型      | 是否必填 | 描述                                       |
+| ------------- | --------- | -------- | ------------------------------------------ |
+| dir           | `string`  | `false`  | 拉取的目录名称                             |
+| branch        | `string`  | `false`  | 拉取的分支名称                             |
+| mirrorAddress | `string`  | `false`  | 镜像网站，如果你需要使用镜像可以填写此网站 |
+| silence       | `boolean` | `false`  | 是否静默模式执行 clone                     |
 
 ## 其他
 

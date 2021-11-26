@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import { version } from '../package.json';
 import { getAddress, setAddress, DEFAULTPATH } from './config';
 import GitClone from './gitClone';
-import { setGitSource } from './utils';
+import { setGitSource, getDir, replaceMirror } from './utils';
 
 const program = new Command();
 program.version(version, '-v, --version', '输出当前版本号');
@@ -14,29 +14,11 @@ program
   .description('根据url拉取指定仓库')
   .option('-b, --branch <value>', '拉取指定分支')
   .action((url, dir, { branch } = {}) => {
-    const gitClone = new GitClone({
-      url,
-      branch,
-      dir,
-    });
-    if (!gitClone.isGithubLink(url)) {
-      console.error(
-        `${url} 不是有效链接，目前支持三种格式：\nhttps://github.com/bosens-China/github-clone\nhttps://github.com/bosens-China/github-clone.git\ngit@github.com:bosens-China/breeze-clone.git`,
-      );
-      return;
-    }
-    if (!gitClone.gitExist()) {
-      console.error(`git在当前环境不存在，请安装后继续 https://git-scm.com/`);
-      return;
-    }
-
-    // 替换镜像地址
-    gitClone.option.url = gitClone.replaceMirror(url, getAddress());
     try {
       // 开始拉取
-      gitClone.clone();
+      GitClone(url, { dir, branch, mirrorAddress: getAddress() });
       // 拉取成功之后，进入拉取目录修改推送源地址
-      const directory = dir || gitClone.getDir();
+      const directory = dir || getDir(getAddress() ? replaceMirror(url, getAddress()) : url);
       setGitSource(directory, url);
     } catch (e) {
       console.error(`${e instanceof Error ? e.message : e}`);
