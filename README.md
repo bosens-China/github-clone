@@ -106,10 +106,11 @@ clone('https://github.com/SunshowerC/blog');
 
 | 名称          | 类型      | 是否必填 | 描述                                       |
 | ------------- | --------- | -------- | ------------------------------------------ |
-| dir           | `string`  | `false`  | 拉取的目录名称                             |
+| dirName       | `string`  | `false`  | 拉取的目录名称                             |
 | branch        | `string`  | `false`  | 拉取的分支名称                             |
 | mirrorAddress | `string`  | `false`  | 镜像网站，如果你需要使用镜像可以填写此网站 |
 | silence       | `boolean` | `false`  | 是否静默模式执行 clone                     |
+| cwd           | `string`  | `false`  | 执行 clone 所执行的目录路径                |
 
 ## 其他
 

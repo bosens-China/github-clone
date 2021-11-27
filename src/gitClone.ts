@@ -24,9 +24,10 @@ const pull = (shellStr: string, option?: SpawnSyncOptionsWithBufferEncoding) => 
   return info;
 };
 interface Options {
-  dir: string;
+  dirName: string;
   branch: string;
   mirrorAddress: string;
+  cwd: string;
   silence: boolean;
 }
 
@@ -37,11 +38,12 @@ const clone = (url: string, options?: Partial<Options>) => {
   if (!isGithubLink(url)) {
     throw new Error(`The current URL ${url} is not in a valid GitHub clone format!`);
   }
-  const { dir, branch, mirrorAddress, silence } = options || {};
+  const { dirName, branch, cwd = process.cwd(), mirrorAddress, silence } = options || {};
   // 如果存在镜像网站就替换一下格式
   const template = mirrorAddress ? replaceMirror(url, mirrorAddress) : url;
-  const shell = `git clone ${template}${dir ? ` ${dir}` : ''}${branch ? ` --branch ${branch}` : ''}`;
-  pull(shell, { cwd: process.cwd(), stdio: silence ? 'pipe' : 'inherit' });
+  const shellArr = ['git', 'clone', template, `${dirName || ''}`, branch ? `--branch ${branch}` : ''];
+  const shell = shellArr.filter((f) => f).join(' ');
+  pull(shell, { cwd, stdio: silence ? 'pipe' : 'inherit' });
 };
 
 export default clone;

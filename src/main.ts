@@ -13,12 +13,12 @@ program
   .command('clone <url> [warehouse]')
   .description('根据url拉取指定仓库')
   .option('-b, --branch <value>', '拉取指定分支')
-  .action((url, dir, { branch } = {}) => {
+  .action((url, dirName, { branch } = {}) => {
     try {
       // 开始拉取
-      GitClone(url, { dir, branch, mirrorAddress: getAddress() });
+      GitClone(url, { dirName, branch, mirrorAddress: getAddress() });
       // 拉取成功之后，进入拉取目录修改推送源地址
-      const directory = dir || getDir(getAddress() ? replaceMirror(url, getAddress()) : url);
+      const directory = dirName || getDir(getAddress() ? replaceMirror(url, getAddress()) : url);
       setGitSource(directory, url);
     } catch (e) {
       console.error(`${e instanceof Error ? e.message : e}`);
