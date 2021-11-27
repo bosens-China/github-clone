@@ -1,6 +1,6 @@
 {
   "name": "@boses/github-clone",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "main": "./dist/gitClone.js",
   "module": "./dist/gitClone.esm.js",
   "license": "MIT",

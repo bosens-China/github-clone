@@ -30,7 +30,7 @@ interface Options {
   silence: boolean;
 }
 
-const clone = (url: string, options: Partial<Options>) => {
+const clone = (url: string, options?: Partial<Options>) => {
   if (!gitExist()) {
     throw new Error(`Git does not exist!`);
   }
