@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/bosens-China/github-clone/compare/v1.2.0...v1.2.1) (2026-06-17)
+
+
+### Continuous Integration
+
+* 在 publish 前升级 npm 以支持 trusted publishing OIDC ([26a6dd3](https://github.com/bosens-China/github-clone/commit/26a6dd34dcbc95c4f6d13e9c68eb754d54d7240a))
+
 ## [1.2.0](https://github.com/bosens-China/github-clone/compare/v1.1.6...v1.2.0) (2026-06-17)
 
 
