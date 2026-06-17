@@ -1,0 +1,68 @@
+name: release
+
+on:
+  push:
+    branches: [main]
+
+# 同一分支只跑一份 release，避免重复创建 PR
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # 第一步：维护一个长期开的 release PR。
+  # 解析 main 上新增的 conventional commits，自动更新 CHANGELOG.md 与 package.json 版本号。
+  # 当 release PR 被合并时，release_created 输出为 true，并自动打 tag。
+  release-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  # 第二步：仅在 release PR 合并、tag 已创建时执行。
+  # 走 npm Trusted Publishing (OIDC)，无需 NPM_TOKEN；
+  # publishConfig.provenance=true 会自动附带来源证明。
+  # CLI 11.15+ 默认进入 staging 队列，需到 npmjs.com 用 2FA approve。
+  publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Verify built CLI
+        run: node dist/main.js --version
+
+      - name: Publish to npm
+        run: npm publish

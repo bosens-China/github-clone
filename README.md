@@ -214,6 +214,41 @@ pnpm build          # Rolldown 打包 + 生成 .d.ts
 
 `pnpm install` 会通过 `prepare` 脚本自动安装 Husky 钩子。提交时 `pre-commit` 会对暂存的 `*.{ts,mjs}` 文件执行 `eslint --fix`。
 
+## 发布流程
+
+本仓库通过 GitHub Actions + [release-please](https://github.com/googleapis/release-please) + npm Trusted Publishing 自动化发布，无需手动维护版本号、CHANGELOG，也无需 `NPM_TOKEN`。
+
+**两条 workflow：**
+
+| 文件 | 触发 | 作用 |
+|------|------|------|
+| `.github/workflows/ci.yml` | `pull_request` / `push` 到 `main` | lint + type-check + 测试 + 构建校验 |
+| `.github/workflows/release.yml` | `push` 到 `main` | release-please 维护 release PR；该 PR 合并后自动 `npm publish` |
+
+**贡献提交规范（Conventional Commits）：**
+
+```text
+feat: ...        # 新功能（minor）
+fix: ...         # bug 修复（patch）
+perf: ...        # 性能优化（patch）
+refactor: ...    # 重构（patch）
+docs: ...        # 文档
+test: ...        # 测试
+chore: ...       # 杂项（不进 CHANGELOG）
+
+# 破坏性变更（major）
+feat!: ...
+或在 body 中写 BREAKING CHANGE: ...
+```
+
+**发布步骤：**
+
+1. 在 PR 中按上述格式写 commit
+2. PR 合并到 `main`
+3. release-please 自动在仓库里维护一个 `chore(main): release x.y.z` PR，里面包含 CHANGELOG 与版本号更新
+4. Review 并合并该 PR → 自动打 tag → 触发 `npm publish`（OIDC，无 token）
+5. 在 npmjs.com 用 2FA approve staged package → 上线
+
 ## 限制
 
 - 仅支持 GitHub（`github.com`），不支持 GitLab / Gitee / GitHub Enterprise
