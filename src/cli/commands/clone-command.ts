@@ -23,7 +23,7 @@ function printVerboseClonePlan(
 
   console.log(pc.bold('克隆计划'));
   console.log(pc.dim(`  模式      : ${mirrorHost ? `镜像（${mirrorHost}）` : '直连 GitHub'}`));
-  console.log(pc.dim(`  clone 地址: ${cloneUrl}`));
+  console.log(pc.dim(`  克隆地址  : ${cloneUrl}`));
   if (mirrorHost) {
     console.log(pc.dim(`  恢复 origin: ${normalizedHttps}`));
   }
@@ -40,9 +40,9 @@ function printVerboseClonePlan(
     gitFlags.push('--single-branch');
   }
   if (gitFlags.length > 0) {
-    console.log(pc.dim(`  git 参数  : ${gitFlags.join(' ')}`));
+    console.log(pc.dim(`  Git 参数  : ${gitFlags.join(' ')}`));
   } else {
-    console.log(pc.dim('  git 参数  : （无额外参数，完整克隆）'));
+    console.log(pc.dim('  Git 参数  : （无额外参数，完整克隆）'));
   }
   console.log('');
 }

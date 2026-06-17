@@ -35,7 +35,7 @@ function buildCloneArgs(params: GitCloneParams): string[] {
 function assertGitSuccess(result: { failed: boolean; exitCode?: number; stderr?: string }): void {
   if (result.failed || (result.exitCode !== undefined && result.exitCode !== 0)) {
     const stderr = result.stderr?.trim();
-    throw new Error(stderr || `git 命令执行失败，退出码 ${result.exitCode ?? 'unknown'}`);
+    throw new Error(stderr || `Git 命令执行失败，退出码 ${result.exitCode ?? '未知'}`);
   }
 }
 

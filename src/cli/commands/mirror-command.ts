@@ -8,7 +8,7 @@ export function printMirror(host: string | undefined): void {
     console.log(`当前镜像：${pc.cyan(host)}`);
     return;
   }
-  console.log(pc.yellow('当前未配置镜像，clone 将直连 GitHub'));
+  console.log(pc.yellow('当前未配置镜像，克隆将直连 GitHub'));
 }
 
 export function runMirrorSet(host: string): void {
@@ -18,7 +18,7 @@ export function runMirrorSet(host: string): void {
 
 export function runMirrorUnset(): void {
   defaultConfigStore.unsetMirrorHost();
-  console.log(pc.green('已清除镜像配置，clone 将直连 GitHub'));
+  console.log(pc.green('已清除镜像配置，克隆将直连 GitHub'));
 }
 
 export function runMirrorList(): void {
@@ -31,7 +31,7 @@ export function runMirrorList(): void {
   }
   if (!current) {
     console.log('');
-    console.log(pc.dim('提示：使用 g mirror set <host> 或 g mirror set <preset名> 进行配置'));
+    console.log(pc.dim('提示：使用 g mirror set <host> 或 g mirror set <预设名> 进行配置'));
   }
 }
 
@@ -42,7 +42,7 @@ export async function runMirrorTest(host?: string): Promise<void> {
   }
 
   const probeUrl = buildMirrorProbeUrl(mirrorHost, MIRROR_PROBE_REPO);
-  console.log(pc.dim(`正在探测 ${probeUrl} ...`));
+  console.log(pc.dim(`正在探测 ${probeUrl}⋯⋯`));
 
   const response = await fetch(probeUrl, { method: 'HEAD', signal: AbortSignal.timeout(10_000) });
   if (!response.ok) {

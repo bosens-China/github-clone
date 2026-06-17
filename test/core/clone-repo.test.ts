@@ -24,7 +24,7 @@ describe('cloneGithubRepo', () => {
 
   it('未安装 git 时抛错', () => {
     gitExistsMock.mockReturnValue(false);
-    expect(() => cloneGithubRepo('https://github.com/foo/bar')).toThrow('未检测到 git');
+    expect(() => cloneGithubRepo('https://github.com/foo/bar')).toThrow('未检测到 Git');
   });
 
   it('无镜像时直连 GitHub', () => {

@@ -46,12 +46,12 @@ program
   .option(
     '--depth <n>',
     '浅克隆：只拉取最近 n 次提交（传给 git clone --depth）。' +
-      '如 --depth 1 表示只要最新版本，体积更小、速度更快，但本地没有完整 git 历史',
+      '如 --depth 1 表示只要最新版本，体积更小、速度更快，但本地没有完整 Git 历史',
     (value: string) => Number.parseInt(value, 10),
   )
   .option(
     '--single-branch',
-    '只克隆单个分支，不下载其它远程分支（传给 git clone --single-branch）。' +
+    '只克隆单个分支，不下载其他远程分支（传给 git clone --single-branch）。' +
       '常与 -b 联用；单独使用时默认只拉远程默认分支（通常是 main）',
   )
   .option(
@@ -60,7 +60,7 @@ program
   )
   .option(
     '--verbose',
-    '输出克隆前的详细信息：镜像/直连模式、实际 clone 地址、分支与 git 参数等（不改变 git 本身的输出）',
+    '输出克隆前的详细信息：镜像/直连模式、实际克隆地址、分支与 Git 参数等（不改变 Git 本身的输出）',
   )
   .addHelpText(
     'after',
@@ -89,7 +89,7 @@ mirror
 
 mirror
   .command('get')
-  .description('查看 ~/.g.config 中保存的镜像；未配置时 clone 将直连 GitHub')
+  .description('查看 ~/.g.config 中保存的镜像；未配置时克隆将直连 GitHub')
   .action(() => {
     printMirror(defaultConfigStore.getMirrorHost());
   });
@@ -104,7 +104,7 @@ mirror
 
 mirror
   .command('unset')
-  .description('删除 ~/.g.config，清除镜像配置（clone 将直连 GitHub）')
+  .description('删除 ~/.g.config，清除镜像配置（克隆将直连 GitHub）')
   .action(() => {
     runMirrorUnset();
   });

@@ -7,7 +7,7 @@ export interface CloneOptions {
   mirrorHost?: string;
   /** 工作目录 */
   cwd?: string;
-  /** 静默模式，不继承 git 输出 */
+  /** 静默模式，不继承 Git 输出 */
   silence?: boolean;
   /** 浅克隆深度 */
   depth?: number;

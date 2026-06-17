@@ -55,10 +55,10 @@ g clone <url> [dir] [options]
 | `url` | GitHub 仓库地址（必填） |
 | `dir` | 本地目录名；省略则使用仓库名 |
 | `-b, --branch <name>` | 只检出指定分支（等价于 `git clone --branch`） |
-| `--depth <n>` | 浅克隆：只拉取最近 `n` 次提交。`--depth 1` 表示只要最新版本，更快更省空间，但本地没有完整 git 历史 |
-| `--single-branch` | 只克隆单个分支，不下载其它远程分支。常与 `-b` 联用；单独使用时默认只拉远程默认分支（通常是 `main`） |
+| `--depth <n>` | 浅克隆：只拉取最近 `n` 次提交。`--depth 1` 表示只要最新版本，更快更省空间，但本地没有完整 Git 历史 |
+| `--single-branch` | 只克隆单个分支，不下载其他远程分支。常与 `-b` 联用；单独使用时默认只拉远程默认分支（通常是 `main`） |
 | `--no-mirror` | 忽略已配置的镜像，强制直连 `github.com` |
-| `--verbose` | 克隆前输出详细计划：镜像/直连模式、实际 clone 地址、origin 恢复地址、本地目录、git 参数 |
+| `--verbose` | 克隆前输出详细计划：镜像/直连模式、实际克隆地址、origin 恢复地址、本地目录、Git 参数 |
 
 **支持的 URL 格式：**
 
@@ -93,10 +93,10 @@ g clone git@github.com:bosens-China/github-clone.git
 ```text
 克隆计划
   模式      : 镜像（kgithub.com）
-  clone 地址: https://kgithub.com/owner/repo.git
+  克隆地址  : https://kgithub.com/owner/repo.git
   恢复 origin: https://github.com/owner/repo.git
   本地目录  : repo
-  git 参数  : --branch dev --depth 1 --single-branch
+  Git 参数  : --branch dev --depth 1 --single-branch
 
 ✓ 克隆完成：repo，分支 dev
   已恢复 origin 为 GitHub 官方地址
@@ -109,7 +109,7 @@ g clone git@github.com:bosens-China/github-clone.git
 | `g mirror list`（`ls`） | 列出内置镜像预设，标注当前使用的镜像 |
 | `g mirror set <host\|preset>` | 设置镜像域名或预设名（`kgithub` / `moeyy`） |
 | `g mirror get` | 查看 `~/.g.config` 中的自定义镜像 |
-| `g mirror test [host]` | 对镜像发 HTTP HEAD 探测是否可达（超时 10s） |
+| `g mirror test [host]` | 对镜像发起 HTTP HEAD 探测是否可达（超时 10 秒） |
 | `g mirror unset` | 删除 `~/.g.config` |
 
 **内置预设：**
@@ -119,7 +119,7 @@ g clone git@github.com:bosens-China/github-clone.git
 | `kgithub` | `kgithub.com` | KGitHub 镜像（域名替换） |
 | `moeyy` | `github.moeyy.xyz` | Moeyy 镜像（域名替换） |
 
-**镜像与 clone 的关系：**
+**镜像与克隆的关系：**
 
 | 场景 | `g mirror get` | `g clone` 行为 |
 |------|----------------|----------------|
@@ -160,7 +160,7 @@ try {
 | `branch` | `string` | 分支名 |
 | `mirrorHost` | `string` | 镜像域名（API 不会读取 `~/.g.config`，需显式传入） |
 | `cwd` | `string` | 执行目录，默认 `process.cwd()` |
-| `silence` | `boolean` | 静默模式，不继承 git 输出 |
+| `silence` | `boolean` | 静默模式，不继承 Git 输出 |
 | `depth` | `number` | 浅克隆深度 |
 | `singleBranch` | `boolean` | 仅克隆指定分支 |
 
@@ -183,7 +183,7 @@ src/
     ├── git-client.ts
     └── github-url.ts
 
-test/                               # 测试目录（镜像 src 结构，kebab-case）
+test/                               # 测试目录（与 src 目录结构对应）
 dist/                               # 构建产物
 ```
 
