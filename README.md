@@ -227,4 +227,4 @@ pnpm build          # Rolldown 打包 + 生成 .d.ts
 
 ## 协议
 
-[MIT License](/License)
+[MIT License](/LICENSE)

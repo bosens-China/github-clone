@@ -35,7 +35,15 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bosens-China/github-clone"
+    "url": "git+https://github.com/bosens-China/github-clone.git"
+  },
+  "homepage": "https://github.com/bosens-China/github-clone#readme",
+  "bugs": {
+    "url": "https://github.com/bosens-China/github-clone/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
