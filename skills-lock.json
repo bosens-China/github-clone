@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "chinese-article-writing": {
+      "source": "bosens-China/my-skills",
+      "sourceType": "github",
+      "skillPath": "skills/chinese-article-writing/SKILL.md",
+      "computedHash": "73804701320943f1af7ccb99a6eb68c7c821110250070a1ac5f1161c6927cd6a"
+    },
+    "file-line-audit": {
+      "source": "bosens-China/my-skills",
+      "sourceType": "github",
+      "skillPath": "skills/file-line-audit/SKILL.md",
+      "computedHash": "f859258e1f97a9b491fa895a0f75613473bf869f99e425dfafe25696b59e9e4a"
+    },
+    "git-step-commit": {
+      "source": "bosens-China/my-skills",
+      "sourceType": "github",
+      "skillPath": "skills/git-step-commit/SKILL.md",
+      "computedHash": "0a88f3826abe50f009d67ac758249d7d485453eabc98d997627e562b886eca03"
+    }
+  }
+}
