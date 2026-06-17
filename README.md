@@ -88,6 +88,15 @@ g clone https://github.com/bosens-China/github-clone --no-mirror --verbose
 g clone git@github.com:bosens-China/github-clone.git
 ```
 
+**默认输出示例：**
+
+```text
+→ 使用镜像 kgithub.com
+... git clone 进度 ...
+✓ 克隆完成：repo
+  已恢复 origin 为 GitHub 官方地址
+```
+
 **`--verbose` 输出示例：**
 
 ```text
@@ -98,8 +107,8 @@ g clone git@github.com:bosens-China/github-clone.git
   本地目录  : repo
   Git 参数  : --branch dev --depth 1 --single-branch
 
+... git clone 进度 ...
 ✓ 克隆完成：repo，分支 dev
-  已恢复 origin 为 GitHub 官方地址
 ```
 
 ### `g mirror` — 镜像管理
@@ -184,7 +193,6 @@ src/
     └── github-url.ts
 
 test/                               # 测试目录（与 src 目录结构对应）
-dist/                               # 构建产物
 ```
 
 命名约定：多词文件名使用 **kebab-case**；`index.ts` 作为模块入口。
