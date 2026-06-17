@@ -1,126 +1,221 @@
 # GitHub-clone
 
-![mlt](https://img.shields.io/badge/License-MIT-brightgreen) ![mlt](https://img.shields.io/badge/npm-1.1.1-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-brightgreen)
 
-为了解决国内 GitHub clone 速度慢较慢的工具
+解决国内 GitHub `clone` 速度慢、连接不稳定问题的 CLI 工具。
 
-> 注意以下文档书写形式遵循下述规范：
->
-> `[]`代表这个字段必填，`<>`则为选填，而`name?:string`，表示这个参数为非必填为`string`类型。
+安装后使用 `g` 命令。配置镜像后，工具会**通过镜像加速下载**，克隆完成后**自动将 `origin` 恢复为 GitHub 官方地址**，便于后续 `push`。
 
-## 执行流程
-
-- 首先将输入的 `github.com`替换成设置的镜像网站地址，默认为（github.com.cnpmjs.org）
-- 执行 `git clone [url]` 的操作
-- 拉取镜像完成之后，重写 git 的远程仓库推送地址，将镜像推送地址重置为 github 的镜像地址
-
-## CLI 使用方式
-
-### 安装
+## 快速开始
 
 ```sh
-yarn global add @boses/github-clone
+g mirror set kgithub          # 配置镜像（首次使用建议执行）
+g mirror test                 # 可选：探测镜像是否可用
+g clone https://github.com/owner/repo
 ```
 
-之后通过`g clone <path>`形式来使用，更多`API`和`clone`的使用方法可以调用`g ---help`查看。
+未配置镜像时，`g clone` 将直连 `github.com`。
 
-### API
+## 工作原理
 
-#### Clone
+```text
+输入 URL →（若已配置镜像）替换为镜像域名 → git clone → git remote set-url origin（恢复官方地址）
+```
 
-**clone <path> [dir] <--branch [branchName]>**
+1. 若已通过 `g mirror set` 配置镜像，将 URL 中的 `github.com` 替换为镜像域名
+2. 执行 `git clone`
+3. 使用镜像时，克隆完成后将 `origin` 改回 `https://github.com/<owner>/<repo>.git`
 
-- `<path>`
+镜像配置保存在 `~/.g.config`（纯文本，内容为镜像域名，如 `kgithub.com`）。
 
-  - type:`stirng`
-  - require:`true`
-
-  拉取 GitHub 仓库 对应的地址，可以拉取以下三种类型地址
-
-  | 类型                                             | 说明                          |
-  | ------------------------------------------------ | ----------------------------- |
-  | https://github.com/bosens-China/github-clone     | 默认浏览器导航栏的地址        |
-  | https://github.com/bosens-China/github-clone.git | Github 右侧 Code HTTPS 的地址 |
-  | git@github.com:bosens-China/breeze-clone.git     | Github 右侧 Code SSH 的地址   |
-
-- `[dir]`
-
-  - type:`stirng`
-  - require:`false`
-
-  clone 到本地的目录名称
-
-- `--branch [branchName]`
-
-  - type:`stirng`
-  - require:`false`
-
-  指定拉取的分支名称，可以以`--branch`长形式使用也可以以`-b`的短形式使用，例如：
-
-  ```sh
-  g clone https://github.com/bosens-China/github-clone.git -b dev
-  ```
-
-#### set [url]
-
-- `[url]`
-
-  - type:`stirng`
-  - require:`true`
-
-  用于配置镜像网站
-
-#### get
-
-返回用户配置的`set [url]`地址，默认为`github.com.cnpmjs.org`
-
-## Node
-
-### 安装
+## 安装
 
 ```sh
-yarn add @boses/github-clone
+pnpm add -g @boses/github-clone
+# 或
+npm i -g @boses/github-clone
 ```
 
-```js
-const clone = require('@boses/github-clone');
-// 也可以通过es模块引用
-// import clone from '@boses/github-clone/gitClone.esm'
-clone('https://github.com/SunshowerC/blog');
+```sh
+g mirror set kgithub
+g clone https://github.com/bosens-China/github-clone
+g --help
 ```
 
-> clone 会以同步的形式运行，记得使用 `try` 包裹住可能的错误
+## CLI 命令
 
-### API
+### `g clone` — 克隆仓库
 
-`clone: (url: string, options: Partial<Options>) => void`
+```sh
+g clone <url> [dir] [options]
+```
 
-#### url
+| 参数 / 选项 | 说明 |
+|-------------|------|
+| `url` | GitHub 仓库地址（必填） |
+| `dir` | 本地目录名；省略则使用仓库名 |
+| `-b, --branch <name>` | 只检出指定分支（等价于 `git clone --branch`） |
+| `--depth <n>` | 浅克隆：只拉取最近 `n` 次提交。`--depth 1` 表示只要最新版本，更快更省空间，但本地没有完整 git 历史 |
+| `--single-branch` | 只克隆单个分支，不下载其它远程分支。常与 `-b` 联用；单独使用时默认只拉远程默认分支（通常是 `main`） |
+| `--no-mirror` | 忽略已配置的镜像，强制直连 `github.com` |
+| `--verbose` | 克隆前输出详细计划：镜像/直连模式、实际 clone 地址、origin 恢复地址、本地目录、git 参数 |
 
-- type:`string`
-- require: `true`
+**支持的 URL 格式：**
 
-拉取的 GitHub 仓库地址
+| 类型 | 示例 |
+|------|------|
+| HTTPS | `https://github.com/owner/repo` |
+| HTTPS + `.git` | `https://github.com/owner/repo.git` |
+| SSH | `git@github.com:owner/repo` 或 `git@github.com:owner/repo.git` |
 
-#### options
+**示例：**
 
-| 名称          | 类型      | 是否必填 | 描述                                       |
-| ------------- | --------- | -------- | ------------------------------------------ |
-| dirName       | `string`  | `false`  | 拉取的目录名称                             |
-| branch        | `string`  | `false`  | 拉取的分支名称                             |
-| mirrorAddress | `string`  | `false`  | 镜像网站，如果你需要使用镜像可以填写此网站 |
-| silence       | `boolean` | `false`  | 是否静默模式执行 clone                     |
-| cwd           | `string`  | `false`  | 执行 clone 所执行的目录路径                |
+```sh
+# 配置镜像后克隆
+g mirror set kgithub
+g clone https://github.com/bosens-China/github-clone
 
-## 其他
+# 指定目录与分支
+g clone https://github.com/bosens-China/github-clone.git my-dir -b dev
 
-目前版本更新导致对`1.0.9`之前的`g get`不支持，请重新执行`g set [url]`的操作
+# 最小体积：只要 main 分支最近一次提交
+g clone https://github.com/bosens-China/github-clone -b main --single-branch --depth 1
 
-如果发现错误或者需要有更好的建议欢迎在 [issues](https://github.com/bosens-China/github-clone) 中提出
+# 已配置镜像但本次强制直连
+g clone https://github.com/bosens-China/github-clone --no-mirror --verbose
 
-## 参考
+# SSH 地址同样支持
+g clone git@github.com:bosens-China/github-clone.git
+```
 
-- [知乎 git clone 一个 github 上的仓库，太慢，经常连接失败...](https://www.zhihu.com/question/27159393/answer/1117219745)
+**`--verbose` 输出示例：**
+
+```text
+克隆计划
+  模式      : 镜像（kgithub.com）
+  clone 地址: https://kgithub.com/owner/repo.git
+  恢复 origin: https://github.com/owner/repo.git
+  本地目录  : repo
+  git 参数  : --branch dev --depth 1 --single-branch
+
+✓ 克隆完成：repo，分支 dev
+  已恢复 origin 为 GitHub 官方地址
+```
+
+### `g mirror` — 镜像管理
+
+| 命令 | 说明 |
+|------|------|
+| `g mirror list`（`ls`） | 列出内置镜像预设，标注当前使用的镜像 |
+| `g mirror set <host\|preset>` | 设置镜像域名或预设名（`kgithub` / `moeyy`） |
+| `g mirror get` | 查看 `~/.g.config` 中的自定义镜像 |
+| `g mirror test [host]` | 对镜像发 HTTP HEAD 探测是否可达（超时 10s） |
+| `g mirror unset` | 删除 `~/.g.config` |
+
+**内置预设：**
+
+| 预设名 | 域名 | 说明 |
+|--------|------|------|
+| `kgithub` | `kgithub.com` | KGitHub 镜像（域名替换） |
+| `moeyy` | `github.moeyy.xyz` | Moeyy 镜像（域名替换） |
+
+**镜像与 clone 的关系：**
+
+| 场景 | `g mirror get` | `g clone` 行为 |
+|------|----------------|----------------|
+| 未配置镜像 | 提示未配置 | 直连 GitHub |
+| 已 `mirror set` | 显示配置的域名 | 使用配置的镜像 |
+| 已 `mirror unset` | 提示未配置 | 直连 GitHub |
+| 已配置镜像 + `--no-mirror` | — | 强制直连 GitHub |
+
+## 编程式 API
+
+```sh
+pnpm add @boses/github-clone
+```
+
+```ts
+import clone from '@boses/github-clone';
+
+try {
+  clone('https://github.com/bosens-China/github-clone', {
+    mirrorHost: 'kgithub.com',
+    branch: 'main',
+    depth: 1,
+    singleBranch: true,
+    silence: true,
+  });
+} catch (error) {
+  console.error(error);
+}
+```
+
+### `clone(url, options?)`
+
+同步 API，请用 `try/catch` 处理错误。不会读取 `~/.g.config`，镜像需通过 `mirrorHost` 显式传入。
+
+| 选项 | 类型 | 说明 |
+|------|------|------|
+| `dirName` | `string` | 本地目录名 |
+| `branch` | `string` | 分支名 |
+| `mirrorHost` | `string` | 镜像域名（API 不会读取 `~/.g.config`，需显式传入） |
+| `cwd` | `string` | 执行目录，默认 `process.cwd()` |
+| `silence` | `boolean` | 静默模式，不继承 git 输出 |
+| `depth` | `number` | 浅克隆深度 |
+| `singleBranch` | `boolean` | 仅克隆指定分支 |
+
+## 项目结构
+
+```text
+src/
+├── index.ts                        # 库 API 入口
+├── constants.ts
+├── types.ts
+├── cli/
+│   ├── index.ts                    # CLI 入口
+│   └── commands/
+│       ├── clone-command.ts
+│       └── mirror-command.ts
+├── config/
+│   └── mirror-store.ts
+└── core/
+    ├── clone-repo.ts
+    ├── git-client.ts
+    └── github-url.ts
+
+test/                               # 测试目录（镜像 src 结构，kebab-case）
+dist/                               # 构建产物
+```
+
+命名约定：多词文件名使用 **kebab-case**；`index.ts` 作为模块入口。
+
+## 开发
+
+要求：Node ≥ 22，pnpm，TypeScript strict。
+
+```sh
+pnpm install
+pnpm dev            # 监听模式运行 CLI（src/cli/index.ts）
+pnpm test           # 运行测试
+pnpm test:coverage  # 测试 + 覆盖率
+pnpm type-check     # TypeScript 类型检查
+pnpm lint           # ESLint 检查
+pnpm format         # ESLint 自动修复（与 pre-commit 钩子一致）
+pnpm build          # Rolldown 打包 + 生成 .d.ts
+```
+
+`pnpm install` 会通过 `prepare` 脚本自动安装 Husky 钩子。提交时 `pre-commit` 会对暂存的 `*.{ts,mjs}` 文件执行 `eslint --fix`。
+
+## 限制
+
+- 仅支持 GitHub（`github.com`），不支持 GitLab / Gitee / GitHub Enterprise
+- 镜像为**域名替换型**，不支持 `ghproxy.com/https://github.com/...` 前缀代理型
+- 不支持 `git pull` / `git fetch` 加速
+- `mirror test` 仅验证 HTTP 可达，不保证 `git clone` 一定成功
+
+## 反馈
+
+如有问题或建议，欢迎在 [Issues](https://github.com/bosens-China/github-clone) 反馈。
 
 ## 协议
 
