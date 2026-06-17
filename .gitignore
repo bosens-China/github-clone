@@ -1,7 +1,10 @@
 .DS_Store
 node_modules
 /dist
+/coverage
 
+# skillink 同步产物
+.agents/
 
 # local env files
 .env.local
@@ -23,3 +26,5 @@ pnpm-debug.log*
 
 /yarn-error.log
 CHANGELOG.md
+CLAUDE.md
+.claude
