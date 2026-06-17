@@ -55,6 +55,11 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: pnpm
 
+      # Node 22 自带 npm 10.x，但 npm Trusted Publishing 的 OIDC handshake
+      # 需要 npm >= 11.5.1，否则 registry 把请求当匿名用户、隐藏为 404。
+      - name: Upgrade npm to support trusted publishing
+        run: npm install -g npm@latest
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
