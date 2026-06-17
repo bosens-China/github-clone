@@ -8,13 +8,15 @@ export interface ParsedGithubUrl {
 }
 
 export function isGithubLink(url: string): boolean {
-  return GITHUB_HTTPS_RE.test(url) || GITHUB_SSH_RE.test(url);
+  const trimmed = url.trim();
+  return GITHUB_HTTPS_RE.test(trimmed) || GITHUB_SSH_RE.test(trimmed);
 }
 
 export function parseGithubUrl(url: string): ParsedGithubUrl {
-  const httpsMatch = GITHUB_HTTPS_RE.exec(url);
+  const trimmed = url.trim();
+  const httpsMatch = GITHUB_HTTPS_RE.exec(trimmed);
   if (httpsMatch) {
-    const [, owner, repo] = httpsMatch;
+    const [, owner, repo] = httpsMatch as RegExpExecArray & [string, string, string];
     return {
       owner,
       repo,
@@ -22,9 +24,9 @@ export function parseGithubUrl(url: string): ParsedGithubUrl {
     };
   }
 
-  const sshMatch = GITHUB_SSH_RE.exec(url);
+  const sshMatch = GITHUB_SSH_RE.exec(trimmed);
   if (sshMatch) {
-    const [, owner, repo] = sshMatch;
+    const [, owner, repo] = sshMatch as RegExpExecArray & [string, string, string];
     return {
       owner,
       repo,

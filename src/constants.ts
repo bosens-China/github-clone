@@ -18,5 +18,5 @@ export const MIRROR_PRESETS: readonly MirrorPreset[] = [
   },
 ] as const;
 
-/** 用于 mirror test 的探测仓库路径 */
-export const MIRROR_PROBE_REPO = 'bosens-China/github-clone';
+/** 用于 mirror test 的探测仓库路径（GitHub 官方示例仓库，长期稳定） */
+export const MIRROR_PROBE_REPO = 'octocat/Hello-World';

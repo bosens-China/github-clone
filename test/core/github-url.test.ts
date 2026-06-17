@@ -35,6 +35,12 @@ describe('parseGithubUrl', () => {
       'https://github.com/bosens-China/breeze-cli.git',
     );
   });
+
+  it('容忍前后空白与换行', () => {
+    expect(parseGithubUrl('  https://github.com/foo/bar\n').repo).toBe('bar');
+    expect(parseGithubUrl('\tgit@github.com:foo/bar.git ').repo).toBe('bar');
+    expect(isGithubLink('  https://github.com/foo/bar  ')).toBe(true);
+  });
 });
 
 describe('replaceMirrorHost', () => {
