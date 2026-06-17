@@ -6,7 +6,7 @@ import pc from 'picocolors';
 import { ZodError } from 'zod';
 import { version } from '../../package.json';
 import { defaultConfigStore } from '../config/mirror-store';
-import { runCloneCommand } from './commands/clone-command';
+import { runCloneCommand, type CloneCommandOptions } from './commands/clone-command';
 import {
   printMirror,
   resolveMirrorHostInput,
@@ -18,7 +18,7 @@ import {
 
 function formatCliError(error: unknown): string {
   if (error instanceof ZodError) {
-    return error.errors.map((item) => item.message).join('；');
+    return error.issues.map((item) => item.message).join('；');
   }
   if (error instanceof Error) {
     return error.message;
@@ -31,7 +31,16 @@ const program = new Command();
 program
   .name('g')
   .description('加速国内 GitHub clone：通过镜像拉取代码，完成后自动将 origin 恢复为 GitHub 官方地址')
-  .version(version, '-v, --version', '输出版本号');
+  .version(version, '-v, --version', '输出版本号')
+  .addHelpText(
+    'after',
+    `
+快速开始:
+  $ g mirror set kgithub                          # 配置镜像（首次使用）
+  $ g mirror test                                 # 验证镜像可用
+  $ g clone https://github.com/owner/repo         # 克隆仓库
+`,
+  );
 
 program
   .command('clone <url> [dir]')
@@ -72,7 +81,7 @@ program
   $ g clone https://github.com/owner/repo --no-mirror --verbose
 `,
   )
-  .action((url: string, dir: string | undefined, options) => {
+  .action(async (url: string, dir: string | undefined, options: CloneCommandOptions) => {
     runCloneCommand(url, dir, options);
   });
 
@@ -83,14 +92,14 @@ const mirror = program
 mirror
   .command('set <host>')
   .description('设置镜像域名，或传入预设名（kgithub / moeyy）。执行 g mirror list 查看预设')
-  .action((host: string) => {
+  .action(async (host: string) => {
     runMirrorSet(resolveMirrorHostInput(host));
   });
 
 mirror
   .command('get')
   .description('查看 ~/.g.config 中保存的镜像；未配置时克隆将直连 GitHub')
-  .action(() => {
+  .action(async () => {
     printMirror(defaultConfigStore.getMirrorHost());
   });
 
@@ -98,14 +107,14 @@ mirror
   .command('list')
   .alias('ls')
   .description('列出内置镜像预设及说明，并标注当前正在使用的镜像')
-  .action(() => {
+  .action(async () => {
     runMirrorList();
   });
 
 mirror
   .command('unset')
   .description('删除 ~/.g.config，清除镜像配置（克隆将直连 GitHub）')
-  .action(() => {
+  .action(async () => {
     runMirrorUnset();
   });
 

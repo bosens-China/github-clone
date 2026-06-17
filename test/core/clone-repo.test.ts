@@ -50,4 +50,41 @@ describe('cloneGithubRepo', () => {
       expect.any(String),
     );
   });
+
+  it('空字符串 dirName 时回退到仓库名（避免 origin 修到 cwd 自身）', () => {
+    cloneGithubRepo('https://github.com/foo/bar', {
+      dirName: '',
+      mirrorHost: 'kgithub.com',
+    });
+
+    // git clone 不带显式 dirName，让 git 用 repo 名建目录
+    expect(runGitCloneMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: 'https://kgithub.com/foo/bar.git',
+        dirName: undefined,
+      }),
+    );
+    // origin 恢复到正确的子目录 'bar'，不是空串
+    expect(setRemoteOriginMock).toHaveBeenCalledWith(
+      'bar',
+      'https://github.com/foo/bar.git',
+      expect.any(String),
+    );
+  });
+
+  it('仅含空白的 dirName 同样被规范化', () => {
+    cloneGithubRepo('https://github.com/foo/bar', {
+      dirName: '   ',
+      mirrorHost: 'kgithub.com',
+    });
+
+    expect(runGitCloneMock).toHaveBeenCalledWith(
+      expect.objectContaining({ dirName: undefined }),
+    );
+    expect(setRemoteOriginMock).toHaveBeenCalledWith(
+      'bar',
+      'https://github.com/foo/bar.git',
+      expect.any(String),
+    );
+  });
 });

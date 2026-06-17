@@ -21,11 +21,12 @@ export function cloneGithubRepo(url: string, options?: CloneOptions): void {
     singleBranch,
   } = options ?? {};
 
-  const targetDir = dirName ?? getRepoDirName(url);
+  const requestedDir = dirName?.trim() ? dirName.trim() : undefined;
+  const targetDir = requestedDir ?? getRepoDirName(url);
 
   runGitClone({
     url: cloneUrl,
-    dirName: dirName || undefined,
+    dirName: requestedDir,
     branch,
     depth,
     singleBranch,
