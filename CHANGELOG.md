@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/bosens-China/github-clone/compare/v1.2.1...v1.3.0) (2026-07-28)
+
+
+### Features
+
+* 支持带路径的镜像地址 ([9a37172](https://github.com/bosens-China/github-clone/commit/9a37172e351b040ee96f2518e4fa49d3d69a0910))
+
 ## [1.2.1](https://github.com/bosens-China/github-clone/compare/v1.2.0...v1.2.1) (2026-06-17)
 
 
