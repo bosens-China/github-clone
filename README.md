@@ -19,14 +19,14 @@ g clone https://github.com/owner/repo
 ## 工作原理
 
 ```text
-输入 URL →（若已配置镜像）替换为镜像域名 → git clone → git remote set-url origin（恢复官方地址）
+输入 URL →（若已配置镜像）替换为镜像地址 → git clone → git remote set-url origin（恢复官方地址）
 ```
 
-1. 若已通过 `g mirror set` 配置镜像，将 URL 中的 `github.com` 替换为镜像域名
+1. 若已通过 `g mirror set` 配置镜像，将 URL 中的 `github.com` 替换为镜像地址
 2. 执行 `git clone`
 3. 使用镜像时，克隆完成后将 `origin` 改回 `https://github.com/<owner>/<repo>.git`
 
-镜像配置保存在 `~/.g.config`（纯文本，内容为镜像域名，如 `kgithub.com`）。
+镜像配置保存在 `~/.g.config`（纯文本，内容为域名或域名/路径，如 `kgithub.com`、`gitclone.com/github.com`）。
 
 ## 安装
 
@@ -116,24 +116,27 @@ g clone git@github.com:bosens-China/github-clone.git
 | 命令 | 说明 |
 |------|------|
 | `g mirror list`（`ls`） | 列出内置镜像预设，标注当前使用的镜像 |
-| `g mirror set <host\|preset>` | 设置镜像域名或预设名（`kgithub` / `moeyy`） |
+| `g mirror set <address\|preset>` | 设置镜像地址或预设名（`kgithub` / `moeyy` / `gitclone`） |
 | `g mirror get` | 查看 `~/.g.config` 中的自定义镜像 |
-| `g mirror test [host]` | 对镜像发起 HTTP HEAD 探测是否可达（超时 10 秒） |
+| `g mirror test [address]` | 对镜像发起 HTTP HEAD 探测是否可达（超时 10 秒） |
 | `g mirror unset` | 删除 `~/.g.config` |
 
 **内置预设：**
 
-| 预设名 | 域名 | 说明 |
+| 预设名 | 地址 | 说明 |
 |--------|------|------|
 | `kgithub` | `kgithub.com` | KGitHub 镜像（域名替换） |
 | `moeyy` | `github.moeyy.xyz` | Moeyy 镜像（域名替换） |
+| `gitclone` | `gitclone.com/github.com` | GitClone 缓存（路径前缀） |
+
+例如，`g mirror set gitclone` 会将 `https://github.com/owner/repo.git` 转换为 `https://gitclone.com/github.com/owner/repo.git`。
 
 **镜像与克隆的关系：**
 
 | 场景 | `g mirror get` | `g clone` 行为 |
 |------|----------------|----------------|
 | 未配置镜像 | 提示未配置 | 直连 GitHub |
-| 已 `mirror set` | 显示配置的域名 | 使用配置的镜像 |
+| 已 `mirror set` | 显示配置的地址 | 使用配置的镜像 |
 | 已 `mirror unset` | 提示未配置 | 直连 GitHub |
 | 已配置镜像 + `--no-mirror` | — | 强制直连 GitHub |
 
@@ -167,7 +170,7 @@ try {
 |------|------|------|
 | `dirName` | `string` | 本地目录名 |
 | `branch` | `string` | 分支名 |
-| `mirrorHost` | `string` | 镜像域名（API 不会读取 `~/.g.config`，需显式传入） |
+| `mirrorHost` | `string` | 镜像地址，支持域名或域名/路径（API 不会读取 `~/.g.config`，需显式传入） |
 | `cwd` | `string` | 执行目录，默认 `process.cwd()` |
 | `silence` | `boolean` | 静默模式，不继承 Git 输出 |
 | `depth` | `number` | 浅克隆深度 |
@@ -252,7 +255,7 @@ feat!: ...
 ## 限制
 
 - 仅支持 GitHub（`github.com`），不支持 GitLab / Gitee / GitHub Enterprise
-- 镜像为**域名替换型**，不支持 `ghproxy.com/https://github.com/...` 前缀代理型
+- 支持域名替换型及 `gitclone.com/github.com/...` 路径前缀型镜像，不支持 `ghproxy.com/https://github.com/...` 这类嵌套完整 URL
 - 不支持 `git pull` / `git fetch` 加速
 - `mirror test` 仅验证 HTTP 可达，不保证 `git clone` 一定成功
 

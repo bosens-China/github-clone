@@ -3,7 +3,7 @@ export interface CloneOptions {
   dirName?: string;
   /** 指定分支 */
   branch?: string;
-  /** 镜像主机，例如 kgithub.com */
+  /** 镜像地址，例如 kgithub.com 或 gitclone.com/github.com */
   mirrorHost?: string;
   /** 工作目录 */
   cwd?: string;

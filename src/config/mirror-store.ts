@@ -7,7 +7,10 @@ const mirrorHostSchema = z
   .string()
   .trim()
   .min(1, '镜像地址不能为空')
-  .regex(/^[a-zA-Z0-9][-a-zA-Z0-9.]*[a-zA-Z0-9]$/, '镜像地址格式无效，请输入域名，例如 kgithub.com');
+  .regex(
+    /^[a-zA-Z0-9](?:[-a-zA-Z0-9.]*[a-zA-Z0-9])?(?:\/[a-zA-Z0-9](?:[-a-zA-Z0-9.]*[a-zA-Z0-9])?)*$/,
+    '镜像地址格式无效，请输入域名或域名/路径，例如 kgithub.com 或 gitclone.com/github.com',
+  );
 
 const defaultConfigPath = path.join(os.homedir(), '.g.config');
 

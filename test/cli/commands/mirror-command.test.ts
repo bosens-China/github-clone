@@ -27,6 +27,7 @@ describe('resolveMirrorHostInput', () => {
   it('预设名转换为 host', () => {
     expect(resolveMirrorHostInput('kgithub')).toBe('kgithub.com');
     expect(resolveMirrorHostInput('moeyy')).toBe('github.moeyy.xyz');
+    expect(resolveMirrorHostInput('gitclone')).toBe('gitclone.com/github.com');
   });
 
   it('传入已知 host 时原样返回', () => {
@@ -160,7 +161,7 @@ describe('runMirrorTest', () => {
     const err = new Error('fetch failed');
     (err as Error & { cause: { code: string } }).cause = { code: 'ENOTFOUND' };
     fetchMock.mockRejectedValue(err);
-    await expect(runMirrorTest('no-such.example')).rejects.toThrow(/无法解析域名/);
+    await expect(runMirrorTest('no-such.example')).rejects.toThrow(/无法解析镜像地址/);
   });
 
   it('连接拒绝时给出友好提示', async () => {

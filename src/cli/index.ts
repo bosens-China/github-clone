@@ -87,13 +87,13 @@ program
 
 const mirror = program
   .command('mirror')
-  .description('管理 GitHub 镜像配置（保存在 ~/.g.config，值为镜像域名，如 kgithub.com）');
+  .description('管理 GitHub 镜像配置（保存在 ~/.g.config，如 kgithub.com 或 gitclone.com/github.com）');
 
 mirror
-  .command('set <host>')
-  .description('设置镜像域名，或传入预设名（kgithub / moeyy）。执行 g mirror list 查看预设')
-  .action(async (host: string) => {
-    runMirrorSet(resolveMirrorHostInput(host));
+  .command('set <address>')
+  .description('设置镜像地址，或传入预设名（kgithub / moeyy / gitclone）。执行 g mirror list 查看预设')
+  .action(async (address: string) => {
+    runMirrorSet(resolveMirrorHostInput(address));
   });
 
 mirror
@@ -119,13 +119,13 @@ mirror
   });
 
 mirror
-  .command('test [host]')
+  .command('test [address]')
   .description(
     '探测镜像是否可达：对镜像站发起 HTTP HEAD 请求。' +
-      '省略 host 时测试当前配置；可传域名或预设名',
+      '省略 address 时测试当前配置；可传镜像地址或预设名',
   )
-  .action(async (host?: string) => {
-    await runMirrorTest(host ? resolveMirrorHostInput(host) : undefined);
+  .action(async (address?: string) => {
+    await runMirrorTest(address ? resolveMirrorHostInput(address) : undefined);
   });
 
 void program.parseAsync(process.argv).catch((error: unknown) => {

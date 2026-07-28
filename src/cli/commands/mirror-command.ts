@@ -40,7 +40,7 @@ export function runMirrorList(): void {
     console.log(`当前配置：${pc.cyan(current)} ${pc.dim('（自定义镜像，非内置预设）')}`);
   } else if (!current) {
     console.log(pc.dim('当前未配置镜像，克隆将直连 GitHub'));
-    console.log(pc.dim('提示：使用 g mirror set <host> 或 g mirror set <预设名> 进行配置'));
+    console.log(pc.dim('提示：使用 g mirror set <address> 或 g mirror set <预设名> 进行配置'));
   }
 }
 
@@ -53,7 +53,7 @@ function formatProbeError(error: unknown, mirrorHost: string): string {
     const cause = (error as Error & { cause?: { code?: string } }).cause;
     const code = cause?.code;
     if (code === 'ENOTFOUND' || code === 'EAI_AGAIN') {
-      return `无法解析域名 ${mirrorHost}，请检查镜像地址是否正确`;
+      return `无法解析镜像地址 ${mirrorHost}，请检查配置是否正确`;
     }
     if (code === 'ECONNREFUSED' || code === 'ECONNRESET') {
       return `连接 ${mirrorHost} 被拒绝或重置，镜像可能不可用`;
@@ -68,7 +68,7 @@ function formatProbeError(error: unknown, mirrorHost: string): string {
 export async function runMirrorTest(host?: string): Promise<void> {
   const mirrorHost = host ?? defaultConfigStore.getMirrorHost();
   if (!mirrorHost) {
-    throw new Error('未配置镜像，请先执行 g mirror set <host> 或指定测试主机');
+    throw new Error('未配置镜像，请先执行 g mirror set <address> 或指定测试地址');
   }
 
   const probeUrl = buildMirrorProbeUrl(mirrorHost, MIRROR_PROBE_REPO);

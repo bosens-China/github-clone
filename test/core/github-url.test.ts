@@ -44,13 +44,19 @@ describe('parseGithubUrl', () => {
 });
 
 describe('replaceMirrorHost', () => {
-  it('替换镜像域名', () => {
+  it('替换镜像地址', () => {
     expect(replaceMirrorHost('https://github.com/bosens-China/breeze-cli', 'kgithub.com')).toBe(
       'https://kgithub.com/bosens-China/breeze-cli.git',
     );
     expect(replaceMirrorHost('git@github.com:bosens-China/breeze-cli.git', 'kgithub.com')).toBe(
       'https://kgithub.com/bosens-China/breeze-cli.git',
     );
+    expect(
+      replaceMirrorHost(
+        'https://github.com/bosens-China/breeze-cli',
+        'gitclone.com/github.com',
+      ),
+    ).toBe('https://gitclone.com/github.com/bosens-China/breeze-cli.git');
   });
 });
 
@@ -65,6 +71,9 @@ describe('buildMirrorProbeUrl', () => {
   it('生成探测 URL', () => {
     expect(buildMirrorProbeUrl('kgithub.com', 'bosens-China/github-clone')).toBe(
       'https://kgithub.com/bosens-China/github-clone',
+    );
+    expect(buildMirrorProbeUrl('gitclone.com/github.com', 'bosens-China/github-clone')).toBe(
+      'https://gitclone.com/github.com/bosens-China/github-clone',
     );
   });
 });

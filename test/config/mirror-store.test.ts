@@ -33,6 +33,12 @@ describe('ConfigStore', () => {
     expect(store.getMirrorHost()).toBe('kgithub.com');
   });
 
+  it('读写带路径的镜像配置', () => {
+    const store = createStore();
+    store.setMirrorHost('gitclone.com/github.com');
+    expect(store.getMirrorHost()).toBe('gitclone.com/github.com');
+  });
+
   it('自动 trim 输入', () => {
     const store = createStore();
     store.setMirrorHost('  kgithub.com  ');
@@ -42,6 +48,8 @@ describe('ConfigStore', () => {
   it('拒绝非法镜像地址', () => {
     const store = createStore();
     expect(() => store.setMirrorHost('not a host')).toThrow();
+    expect(() => store.setMirrorHost('https://gitclone.com/github.com')).toThrow();
+    expect(() => store.setMirrorHost('gitclone.com/')).toThrow();
   });
 
   it('unset 会删除配置文件', () => {

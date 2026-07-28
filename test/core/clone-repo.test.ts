@@ -38,10 +38,10 @@ describe('cloneGithubRepo', () => {
   });
 
   it('有镜像时克隆后恢复 origin', () => {
-    cloneGithubRepo('https://github.com/foo/bar', { mirrorHost: 'kgithub.com' });
+    cloneGithubRepo('https://github.com/foo/bar', { mirrorHost: 'gitclone.com/github.com' });
     expect(runGitCloneMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        url: 'https://kgithub.com/foo/bar.git',
+        url: 'https://gitclone.com/github.com/foo/bar.git',
       }),
     );
     expect(setRemoteOriginMock).toHaveBeenCalledWith(
